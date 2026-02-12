@@ -1,0 +1,40 @@
+name: Enforce main PRs only from prod*
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-source-branch:
+    name: Reject PRs to main unless from prod*
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate source branch
+        shell: bash
+        run: |
+          BASE="${{ github.event.pull_request.base.ref }}"
+          HEAD="${{ github.event.pull_request.head.ref }}"
+
+          echo "Base (target) branch: $BASE"
+          echo "Head (source) branch: $HEAD"
+
+          # Allow exactly "prod"
+          if [[ "$HEAD" == "prod" ]]; then
+            echo "OK: Source branch is 'prod'."
+            exit 0
+          fi
+
+          # Allow branches starting with "prod-"
+          if [[ "$HEAD" == prod-* ]]; then
+            echo "OK: Source branch matches 'prod-*'."
+            exit 0
+          fi
+
+          echo "::error title=Blocked::PRs into 'main' must come from 'prod' or 'prod-*'. Source was '$HEAD'."
+          exit 1
