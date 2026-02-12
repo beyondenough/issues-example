@@ -29,8 +29,18 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Runs a simple test to create a status check
+      - name: Run tests
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo "Running tests..."
+          echo "Test 1: Passed"
+          echo "Test 2: Passed"
+          echo "All tests passed successfully!"
+
+      # Create build artifact for additional status check
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: build/
+          retention-days: 7
