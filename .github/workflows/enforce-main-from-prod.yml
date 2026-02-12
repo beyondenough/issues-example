@@ -1,4 +1,4 @@
-name: Enforce main PRs only from prod*
+name: CI
 
 on:
   pull_request:
@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   enforce-source-branch:
-    name: Reject PRs to main unless from prod*
     runs-on: ubuntu-latest
 
     steps:
