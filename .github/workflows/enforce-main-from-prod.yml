@@ -1,4 +1,4 @@
-name: CI
+name: Enforce Main PR Source Branch
 
 on:
   pull_request:
